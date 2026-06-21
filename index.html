@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Activatour — Активный туризм</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alice&family=Almendra+SC&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- экран загрузки -->
+<div class="loader" id="loader">
+  <p class="loader__text">Загрузка.</p>
+  <div class="loader__wheel" id="loaderWheel">
+  <img src="images/koleso.png" alt="Колесо загрузки" class="wheel-img"/>
+</div>
+  <!-- Линия под колесом -->
+  <div class="loader__line"></div>
+</div>
+
+<!-- уведомления об ошибках -->
+<div class="toast" id="toast"></div>
+
+<!-- окно с успешной отправки формы -->
+<div class="success-popup" id="successPopup" aria-hidden="true">
+  <div class="success-popup__box">
+    <div class="success-popup__icon">✅</div>
+    <h3 class="success-popup__title">Заявка отправлена!</h3>
+    <p class="success-popup__text">Мы получили ваше сообщение и свяжемся с вами в ближайшее время.</p>
+    <button class="btn btn--primary success-popup__btn" id="successPopupClose">Отлично!</button>
+  </div>
+</div>
+
+<!-- отрисованное мобильное меню -->
+<nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <button class="mobile-menu__close" id="mobileClose" aria-label="Закрыть">
+    <svg width="21" height="21" viewBox="0 0 21 21" fill="none">
+      <line x1="1" y1="1" x2="20" y2="20" stroke="#000" stroke-width="2"/>
+      <line x1="20" y1="1" x2="1"  y2="20" stroke="#000" stroke-width="2"/>
+    </svg>
+  </button>
+  <ul class="mobile-menu__list">
+    <li><a href="#tour-types" class="mobile-menu__link">Типы туров</a></li>
+    <li><a href="#regions"    class="mobile-menu__link">Регионы</a></li>
+    <li><a href="#faq"        class="mobile-menu__link">Вопрос-ответ</a></li>
+    <li><a href="#contacts"   class="mobile-menu__link">Контакты</a></li>
+  </ul>
+</nav>
+<div class="mobile-menu__overlay" id="menuOverlay"></div>
+
+<!-- модальное окно для типов туров -->
+<div class="modal" id="tourModal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal__backdrop" id="modalBackdrop"></div>
+  <div class="modal__box">
+    <button class="modal__close" id="modalClose" aria-label="Закрыть">✕</button>
+    <h3 class="modal__title" id="modalTitle">Пешие туры</h3>
+    <div class="modal__slider">
+      <div class="modal__track" id="modalTrack"></div>
+      <button class="modal__nav modal__nav--prev" id="modalPrev" aria-label="Назад">&#8249;</button>
+      <button class="modal__nav modal__nav--next" id="modalNext" aria-label="Вперёд">&#8250;</button>
+      <div class="modal__dots" id="modalDots"></div>
+    </div>
+  </div>
+</div>
+
+<!-- main -->
+<main id="mainContent" class="main-content">
+
+  <!-- класс .hero - главный экран со слайдером  -->
+  <section class="hero" id="home">
+
+    <!-- Слайдер фонов -->
+    <div class="slider" id="slider">
+      <div class="slide slide--active">
+        <img src="images/slide-1.jpg" alt="Слайд 1" class="slide__img"/>
+      </div>
+      <div class="slide">
+        <img src="images/slide-2.jpg" alt="Слайд 2" class="slide__img"/>
+      </div>
+      <div class="slide">
+        <img src="images/slide-3.jpg" alt="Слайд 3" class="slide__img"/>
+      </div>
+
+      <!-- Header внутри слайдера -->
+      <header class="header">
+        <nav class="nav">
+          <ul class="nav__list">
+            <li><a href="#tour-types" class="nav__link">Типы туров</a></li>
+            <li class="nav__divider"></li>
+            <li><a href="#regions"    class="nav__link">Регионы</a></li>
+            <li class="nav__divider"></li> 
+            <li><a href="#faq"        class="nav__link">Вопрос-ответ</a></li>
+            <li class="nav__divider"></li>
+            <li><a href="#contacts"   class="nav__link">Контакты</a></li>
+          </ul>
+          <button class="burger" id="burger" aria-label="Открыть меню">
+            <span></span><span></span><span></span>
+          </button>
+        </nav>
+      </header>
+
+      <!-- анимация -->
+      <div class="hero__tagline" aria-live="polite">
+        <span class="hero__line" id="taglineText">ДЛЯ ТЕХ,</span>
+      </div>
+
+      <!-- Кнопки навигации слайдера -->
+      <button class="slider__btn slider__btn--prev" id="sliderPrev" aria-label="Предыдущий слайд">
+        <span class="slider__btn-bg"></span>
+        <svg width="17" height="22" viewBox="0 0 17 22" fill="none">
+          <path d="M13 2L4 11L13 20" stroke="#74969A" stroke-width="1.9" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button class="slider__btn slider__btn--next" id="sliderNext" aria-label="Следующий слайд">
+        <span class="slider__btn-bg"></span>
+        <svg width="17" height="22" viewBox="0 0 17 22" fill="none">
+          <path d="M4 2L13 11L4 20" stroke="#74969A" stroke-width="1.9" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <!-- Точки слайдера -->
+      <div class="slider__dots" id="sliderDots" role="tablist">
+        <button class="slider__dot" role="tab" aria-label="Слайд 1"></button>
+        <button class="slider__dot" role="tab" aria-label="Слайд 2"></button>
+        <button class="slider__dot slider__dot--active" role="tab" aria-label="Слайд 3" aria-selected="true"></button>
+      </div>
+    </div><!-- /slider -->
+
+    <!-- Подбор тура -->
+    <div class="tour-search">
+      <h1 class="tour-search__title">
+        Ваши приключения начинаются<br/>
+        <span class="tour-search__title-accent">ПРЯМО СЕЙЧАС</span>
+      </h1>
+
+      <form class="tour-form" id="tourForm" novalidate>
+        <p class="tour-form__heading">Подберем тур для вас:</p>
+        <div class="tour-form__grid">
+
+          <!-- Цена -->
+          <div class="tour-form__group">
+            <label class="tour-form__label">Цена:</label>
+            <div class="tour-form__row">
+              <span class="tour-form__prep">с</span>
+              <input type="number" class="tour-form__input" name="priceFrom" placeholder="от" min="0"/>
+              <span class="tour-form__prep">по</span>
+              <input type="number" class="tour-form__input" name="priceTo"   placeholder="до" min="0"/>
+            </div>
+          </div>
+
+          <!-- Регион -->
+          <div class="tour-form__group">
+            <label class="tour-form__label" for="regionSelect">Регион:</label>
+            <select class="tour-form__input tour-form__select" name="region" id="regionSelect">
+              <option value="">Выберите</option>
+              <option value="kavkaz">Кавказ</option>
+              <option value="baikal">Байкал</option>
+              <option value="kamchatka">Камчатка</option>
+              <option value="sochi">Сочи</option>
+              <option value="krym">Крым</option>
+              <option value="pacific">Тихий океан</option>
+            </select>
+          </div>
+
+          <!-- Сроки -->
+          <div class="tour-form__group">
+            <label class="tour-form__label">Сроки:</label>
+            <div class="tour-form__row">
+              <span class="tour-form__prep">от</span>
+              <input type="date" class="tour-form__input" name="dateFrom"/>
+              <span class="tour-form__prep">до</span>
+              <input type="date" class="tour-form__input" name="dateTo"/>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn--primary tour-form__btn">
+            Найти тур
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </section>
+
+  <!-- ТИПЫ ТУРОВ 5 карточек-->
+  <section class="tour-types" id="tour-types">
+    <div class="container">
+      <h2 class="section-title">Типы туров</h2>
+
+      <div class="tour-types__list">
+
+        <article class="tour-card" data-tour="hiking" tabindex="0" role="button" aria-label="Пешие туры — открыть галерею">
+          <img src="images/tour-hiking.jpg" alt="Пешие туры" class="tour-card__img"/>
+          <div class="tour-card__badge">Пешие</div>
+          <div class="tour-card__hover">Смотреть галерею →</div>
+        </article>
+
+        <article class="tour-card" data-tour="water" tabindex="0" role="button" aria-label="Водные прогулки — открыть галерею">
+          <img src="images/tour-water.jpg" alt="Водные прогулки" class="tour-card__img"/>
+          <div class="tour-card__badge">Водные прогулки</div>
+          <div class="tour-card__hover">Смотреть галерею →</div>
+        </article>
+
+       <article class="tour-card" data-tour="cycling" tabindex="0" role="button" aria-label="Велопрогулки — открыть галерею">
+          <img src="images/tour-cycling.jpg" alt="Велопрогулки" class="tour-card__img" style="object-position: center 80%;"/>
+          <div class="tour-card__badge">Велопрогулки</div>
+          <div class="tour-card__hover">Смотреть галерею →</div>
+        </article>
+
+        <article class="tour-card" data-tour="camping" tabindex="0" role="button" aria-label="Палаточный лагерь — открыть галерею">
+          <img src="images/tour-camping.jpg" alt="Палаточный лагерь" class="tour-card__img"/>
+          <div class="tour-card__badge">Палаточный лагерь</div>
+          <div class="tour-card__hover">Смотреть галерею →</div>
+        </article>
+
+        <article class="tour-card" data-tour="extreme" tabindex="0" role="button" aria-label="Экстремальный отдых — открыть галерею">
+          <img src="images/tour-extreme.jpg" alt="Экстремальный отдых" class="tour-card__img"/>
+          <div class="tour-card__badge">Экстремальный отдых</div>
+          <div class="tour-card__hover">Смотреть галерею →</div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- РЕГИОНЫ ПУТЕШЕСТВИЙ -->
+  <section class="regions" id="regions">
+    <div class="container">
+      <h2 class="section-title section-title--center">Регионы путешествий</h2>
+      <div class="regions__grid">
+
+        <article class="region-card" data-region="kavkaz">
+          <div class="region-card__inner">
+            <img
+              src="images/region-kavkaz.jpg"
+              data-map="images/map-kavkaz.jpg"
+              alt="Кавказ" class="region-card__img" loading="lazy"/>
+          </div>
+          <div class="region-card__badge">Кавказ</div>
+        </article>
+
+        <article class="region-card" data-region="baikal">
+          <div class="region-card__inner">
+            <img
+              src="images/region-baikal.jpg"
+              data-map="images/map-baikal.jpg"
+              alt="Байкал" class="region-card__img" loading="lazy"/>
+          </div>
+          <div class="region-card__badge">Байкал</div>
+        </article>
+
+        <article class="region-card" data-region="kamchatka">
+          <div class="region-card__inner">
+            <img
+              src="images/region-kamchatka.jpg"
+              data-map="images/map-kamchatka.jpg"
+              alt="Камчатка" class="region-card__img" loading="lazy"/>
+          </div>
+          <div class="region-card__badge">Камчатка</div>
+        </article>
+
+        <article class="region-card" data-region="sochi">
+          <div class="region-card__inner">
+            <img
+              src="images/region-sochi.jpg"
+              data-map="images/map-sochi.jpg"
+              alt="Сочи" class="region-card__img" loading="lazy"/>
+          </div>
+          <div class="region-card__badge">Сочи</div>
+        </article>
+
+        <article class="region-card" data-region="krym">
+          <div class="region-card__inner">
+            <img
+              src="images/region-krym.jpg"
+              data-map="images/map-krym.jpg"
+              alt="Крым" class="region-card__img" loading="lazy"/>
+          </div>
+          <div class="region-card__badge">Крым</div>
+        </article>
+
+        <article class="region-card" data-region="pacific">
+          <div class="region-card__inner">
+            <img
+              src="images/region-pacific.jpg"
+              data-map="images/map-pacific.jpg"
+              alt="Тихий океан" class="region-card__img" loading="lazy"/>
+          </div>
+          <div class="region-card__badge">Тихий океан</div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- аккордеон -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <h2 class="section-title section-title--center">Вопрос-ответ</h2>
+
+      <div class="faq__list">
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <span>Нужен ли опыт для участия в турах?</span>
+            <div class="faq__icon">+</div>
+          </button>
+          <div class="faq__answer" hidden>
+            <p>Нет, у нас есть туры как для новичков, так и для опытных путешественников. Для каждого маршрута указан уровень сложности. Перед поездкой инструктор проводит инструктаж. Главное — желание и базовая физическая форма.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <span>Что входит в стоимость тура?</span>
+            <div class="faq__icon">+</div>
+          </button>
+          <div class="faq__answer" hidden>
+            <p>Обычно в стоимость включены услуги инструктора, питание, групповое снаряжение и трансферы по маршруту. Точный список всегда указан в описании конкретного тура.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <span>Какое снаряжение нужно брать с собой?</span>
+            <div class="faq__icon">+</div>
+          </button>
+          <div class="faq__answer" hidden>
+            <p>Список зависит от типа тура и региона. Мы предоставляем подробный чек-лист после бронирования. При необходимости часть снаряжения можно арендовать у нас.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <span>Насколько безопасны туры?</span>
+            <div class="faq__icon">+</div>
+          </button>
+          <div class="faq__answer" hidden>
+            <p>Безопасность — наш приоритет. Все маршруты проходят проверку, а инструкторы имеют необходимую квалификацию. В экстренных ситуациях всегда есть план действий.</p>
+          </div>
+        </div>
+
+        <div class="faq__item">
+          <button class="faq__question" aria-expanded="false">
+            <span>Как забронировать тур?</span>
+            <div class="faq__icon">+</div>
+          </button>
+          <div class="faq__answer" hidden>
+            <p>Выберите тур на сайте и оставьте заявку через форму. После этого менеджер свяжется с вами для уточнения деталей. Бронирование подтверждается после внесения предоплаты.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Форма обратной связи -->
+      <div class="contact-form" id="contacts">
+        <h2 class="contact-form__title">Не нашли ответ на свой вопрос?</h2>
+        <p class="contact-form__subtitle">Заполните анкету и мы с вами свяжемся:</p>
+        <form class="contact-form__fields" id="contactForm" novalidate>
+          <input  type="text"  class="contact-form__input" name="name"    placeholder="Ваше имя" autocomplete="name"/>
+          <input  type="tel"   class="contact-form__input" name="phone"   placeholder="Контактный номер телефона" autocomplete="tel"/>
+          <textarea            class="contact-form__input contact-form__textarea" name="message" placeholder="Ваш вопрос/сообщение"></textarea>
+          <button type="submit" class="btn btn--primary contact-form__btn">Отправить</button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER  -->
+  <footer class="footer">
+    <div class="container">
+      <h3 class="footer__title">Мы в социальных сетях:</h3>
+      <div class="footer__socials">
+         <a href="https://t.me/bakateq1" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="Telegram">
+          <svg viewBox="0 0 50 50" fill="white"><path d="M25 0C11.2 0 0 11.2 0 25s11.2 25 25 25 25-11.2 25-25S38.8 0 25 0zm12.1 16.6l-4.2 19.8c-.3 1.4-1.1 1.7-2.2 1.1l-6.1-4.5-2.9 2.8c-.3.3-.6.5-1.3.5l.5-6.3 12.1-10.9c.5-.5-.1-.7-.8-.2L13.4 27.5l-6-1.9c-1.3-.4-1.3-1.3.3-1.9l23.5-9.1c1.1-.4 2 .3 1.9 2z"/></svg>
+        </a>
+        <a href="https://vk.com/bakateq1" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="ВКонтакте">
+          <svg viewBox="0 0 50 50" fill="white"><path d="M25 0C11.2 0 0 11.2 0 25s11.2 25 25 25 25-11.2 25-25S38.8 0 25 0zm13.2 34.4h-3.6c-1.4 0-1.8-.7-4.2-3.1-2.1-2.1-3-2.4-3.5-2.4-.7 0-.9.2-.9 1.2v2.8c0 .9-.3 1.4-2.6 1.4-3.8 0-8-2.3-11-6.6-4.5-6.3-5.7-11-5.7-12 0-.5.2-.9 1.2-.9h3.6c.9 0 1.2.4 1.5 1.4 1.7 4.9 4.5 9.2 5.6 9.2.4 0 .6-.2.6-1.3v-5c-.1-2.3-1.3-2.5-1.3-3.3 0-.4.3-.8 1-.8h5.7c.8 0 1 .4 1 1.3v6.9c0 .8.3 1 .6 1 .4 0 .8-.2 1.7-1.1 2.6-2.9 4.4-7.3 4.4-7.3.2-.5.7-.9 1.5-.9h3.6c1.1 0 1.3.5 1.1 1.3-.5 2.3-5.3 9-5.3 9-.4.7-.6 1 0 1.7.5.6 2 1.9 3 3 1.9 2.1 3.3 3.9 3.7 5.1.3 1.1-.3 1.7-1.2 1.7z"/></svg>
+        </a>
+        <a href="https://ok.ru/bakateq1" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="Одноклассники">
+          <svg viewBox="0 0 50 50" fill="white"><path d="M25 0C11.2 0 0 11.2 0 25s11.2 25 25 25 25-11.2 25-25S38.8 0 25 0zm0 11c3.9 0 7 3.1 7 7s-3.1 7-7 7-7-3.1-7-7 3.1-7 7-7zm0 10c1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3 1.3 3 3 3zm9.4 7.4c-1.3 1.2-2.8 2.1-4.5 2.7l4.2 4.2c1 1 1 2.6 0 3.5-.5.5-1.1.7-1.8.7s-1.3-.2-1.8-.7L25 33.3l-5.5 5.5c-.5.5-1.1.7-1.8.7s-1.3-.2-1.8-.7c-1-1-1-2.6 0-3.5l4.2-4.2c-1.7-.6-3.2-1.5-4.5-2.7-1.1-1-1.1-2.6-.1-3.6 1-.9 2.5-.9 3.5.1 1.7 1.6 3.9 2.5 6 2.5s4.3-.9 6-2.5c1-.9 2.5-1 3.5-.1 1 1 1 2.6-.1 3.6z"/></svg>
+        </a>
+        <a href="mailto:bakateq1o@gmail.com" class="footer__social" aria-label="Email">
+          <svg viewBox="0 0 50 50" fill="white"><path d="M25 0C11.2 0 0 11.2 0 25s11.2 25 25 25 25-11.2 25-25S38.8 0 25 0zm16 17v16c0 1.1-.9 2-2 2H11c-1.1 0-2-.9-2-2V17c0-1.1.9-2 2-2h28c1.1 0 2 .9 2 2zm-4 1.5l-12 7.5-12-7.5V18l12 7.5 12-7.5v.5z"/></svg>
+        </a>
+      </div>
+      <p class="footer__contacts">
+        +7 (950) 393-0-393<br/>bakateq1o@gmail.com
+      </p>
+    </div>
+  </footer>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
